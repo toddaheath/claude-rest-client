@@ -1,0 +1,49 @@
+api:
+  replicaCount: 1
+  image:
+    repository: restward/api
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: restward/frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  host: restward.local
+  annotations: {}
+
+postgresql:
+  enabled: true
+  auth:
+    username: restward
+    password: ""
+    database: restward
+  primary:
+    persistence:
+      size: 5Gi

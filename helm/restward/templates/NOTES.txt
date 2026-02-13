@@ -1,0 +1,14 @@
+Restward has been deployed!
+
+To get the admin API key:
+
+  kubectl get secret {{ include "restward.fullname" . }}-admin -n {{ .Release.Namespace }} -o jsonpath="{.data.admin-api-key}" | base64 -d; echo
+
+{{- if .Values.ingress.enabled }}
+
+Access the application at:
+  http://{{ .Values.ingress.host }}
+{{- end }}
+
+To uninstall:
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

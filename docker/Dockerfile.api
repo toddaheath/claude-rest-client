@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY ClaudeRestClient.sln .
+COPY src/ClaudeRestClient/ClaudeRestClient.csproj src/ClaudeRestClient/
+COPY src/Restward.Api/Restward.Api.csproj src/Restward.Api/
+COPY tests/ClaudeRestClient.Tests/ClaudeRestClient.Tests.csproj tests/ClaudeRestClient.Tests/
+COPY tests/Restward.Api.Tests/Restward.Api.Tests.csproj tests/Restward.Api.Tests/
+RUN dotnet restore ClaudeRestClient.sln
+
+COPY . .
+RUN dotnet publish src/Restward.Api/Restward.Api.csproj -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "Restward.Api.dll"]
