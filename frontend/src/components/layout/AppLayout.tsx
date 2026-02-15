@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '../../store';
-import { getApiKey, setApiKey } from '../../api/client';
+import { getApiKey, setApiKey, isDemoMode } from '../../api/client';
 import { useCollections } from '../../hooks/useCollections';
 import { useEnvironments } from '../../hooks/useEnvironments';
 import { Sidebar } from './Sidebar';
@@ -12,7 +12,7 @@ export function AppLayout() {
   const { sidebarOpen } = useStore();
   const { fetchCollections } = useCollections();
   const { fetchEnvironments } = useEnvironments();
-  const [authenticated, setAuthenticated] = useState(!!getApiKey());
+  const [authenticated, setAuthenticated] = useState(isDemoMode || !!getApiKey());
   const [keyInput, setKeyInput] = useState('');
 
   useEffect(() => {
