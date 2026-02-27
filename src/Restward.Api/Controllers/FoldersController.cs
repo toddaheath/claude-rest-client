@@ -20,7 +20,11 @@ public class FoldersController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Creates a new folder within a collection.</summary>
     [HttpPost("api/collections/{collectionId:guid}/folders")]
+    [ProducesResponseType(typeof(FolderDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<FolderDto>> Create(Guid collectionId, [FromBody] CreateFolderDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -52,7 +56,11 @@ public class FoldersController : ControllerBase
         });
     }
 
+    /// <summary>Updates an existing folder.</summary>
     [HttpPut("api/folders/{id:guid}")]
+    [ProducesResponseType(typeof(FolderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<FolderDto>> Update(Guid id, [FromBody] UpdateFolderDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -79,7 +87,11 @@ public class FoldersController : ControllerBase
         });
     }
 
+    /// <summary>Deletes a folder by ID.</summary>
     [HttpDelete("api/folders/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = GetCurrentUser().Id;

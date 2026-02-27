@@ -25,7 +25,10 @@ public class UsersController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Gets the currently authenticated user's profile.</summary>
     [HttpGet("me")]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<UserDto> GetMe()
     {
         var user = GetCurrentUser();
@@ -38,7 +41,11 @@ public class UsersController : ControllerBase
         });
     }
 
+    /// <summary>Lists all users. Requires admin privileges.</summary>
     [HttpGet]
+    [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<List<UserDto>>> GetAll()
     {
         if (!GetCurrentUser().IsAdmin)
@@ -57,7 +64,12 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
+    /// <summary>Creates a new user. Requires admin privileges.</summary>
     [HttpPost]
+    [ProducesResponseType(typeof(UserWithKeyDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<UserWithKeyDto>> Create([FromBody] CreateUserDto dto)
     {
         if (!GetCurrentUser().IsAdmin)
@@ -87,7 +99,12 @@ public class UsersController : ControllerBase
         });
     }
 
+    /// <summary>Deletes a user by ID. Requires admin privileges.</summary>
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Delete(Guid id)
     {
         if (!GetCurrentUser().IsAdmin)

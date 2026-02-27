@@ -22,7 +22,10 @@ public class EnvironmentsController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Lists all environments accessible to the current user.</summary>
     [HttpGet]
+    [ProducesResponseType(typeof(List<EnvironmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<List<EnvironmentDto>>> GetAll()
     {
         var userId = GetCurrentUser().Id;
@@ -48,7 +51,11 @@ public class EnvironmentsController : ControllerBase
         return Ok(environments);
     }
 
+    /// <summary>Gets an environment by ID, including its variables.</summary>
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(EnvironmentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<EnvironmentDto>> GetById(Guid id)
     {
         var userId = GetCurrentUser().Id;
@@ -63,7 +70,11 @@ public class EnvironmentsController : ControllerBase
         return Ok(MapEnvironment(env));
     }
 
+    /// <summary>Creates a new environment.</summary>
     [HttpPost]
+    [ProducesResponseType(typeof(EnvironmentDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<EnvironmentDto>> Create([FromBody] CreateEnvironmentDto dto)
     {
         var user = GetCurrentUser();
@@ -91,7 +102,11 @@ public class EnvironmentsController : ControllerBase
         return Created($"/api/environments/{env.Id}", MapEnvironment(env));
     }
 
+    /// <summary>Updates an existing environment.</summary>
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(EnvironmentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<EnvironmentDto>> Update(Guid id, [FromBody] UpdateEnvironmentDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -123,7 +138,11 @@ public class EnvironmentsController : ControllerBase
         return Ok(MapEnvironment(env));
     }
 
+    /// <summary>Deletes an environment by ID.</summary>
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = GetCurrentUser().Id;
