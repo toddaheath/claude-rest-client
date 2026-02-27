@@ -23,6 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddMemoryCache();
 
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>();
+
 builder.Services.AddHttpClient("Proxy")
     .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
     {
@@ -112,7 +115,7 @@ app.UseCors();
 app.UseRateLimiter();
 app.UseMiddleware<ApiKeyAuthMiddleware>();
 app.MapControllers();
-app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+app.MapHealthChecks("/health");
 
 app.Run();
 

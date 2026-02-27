@@ -42,7 +42,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<List<UserDto>>> GetAll()
     {
         if (!GetCurrentUser().IsAdmin)
-            return Forbid();
+            return StatusCode(403);
 
         var users = await _db.Users
             .Select(u => new UserDto
@@ -61,7 +61,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserWithKeyDto>> Create([FromBody] CreateUserDto dto)
     {
         if (!GetCurrentUser().IsAdmin)
-            return Forbid();
+            return StatusCode(403);
 
         var apiKey = Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
 
@@ -91,7 +91,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         if (!GetCurrentUser().IsAdmin)
-            return Forbid();
+            return StatusCode(403);
 
         var user = await _db.Users.FindAsync(id);
         if (user is null)
