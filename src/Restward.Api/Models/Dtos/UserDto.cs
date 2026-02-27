@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Restward.Api.Models.Dtos;
@@ -19,6 +20,8 @@ public class UserDto
 
 public class CreateUserDto
 {
+    [Required]
+    [MaxLength(100)]
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 

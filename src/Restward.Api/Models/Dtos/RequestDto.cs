@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Restward.Api.Models.Dtos;
@@ -61,18 +62,26 @@ public class KeyValuePairDto
 
 public class CreateRequestDto
 {
+    [Required]
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
+    [Required]
+    [MaxLength(10)]
+    [AllowedValues("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS")]
     [JsonPropertyName("method")]
     public string Method { get; set; } = "GET";
 
+    [Required]
+    [MaxLength(2048)]
     [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
 
     [JsonPropertyName("body")]
     public string? Body { get; set; }
 
+    [MaxLength(100)]
     [JsonPropertyName("body_content_type")]
     public string? BodyContentType { get; set; }
 
@@ -91,18 +100,23 @@ public class CreateRequestDto
 
 public class UpdateRequestDto
 {
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string? Name { get; set; }
 
+    [MaxLength(10)]
+    [AllowedValues("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS")]
     [JsonPropertyName("method")]
     public string? Method { get; set; }
 
+    [MaxLength(2048)]
     [JsonPropertyName("url")]
     public string? Url { get; set; }
 
     [JsonPropertyName("body")]
     public string? Body { get; set; }
 
+    [MaxLength(100)]
     [JsonPropertyName("body_content_type")]
     public string? BodyContentType { get; set; }
 

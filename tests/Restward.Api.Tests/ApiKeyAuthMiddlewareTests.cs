@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Restward.Api.Data;
 using Restward.Api.Middleware;
@@ -27,6 +28,7 @@ public class ApiKeyAuthMiddlewareTests
 
         var services = new ServiceCollection();
         services.AddSingleton(db);
+        services.AddMemoryCache();
         context.RequestServices = services.BuildServiceProvider();
 
         if (apiKey is not null)
