@@ -1,6 +1,8 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Restward.Api.Data;
 using Restward.Api.Models.Dtos;
 using Restward.Api.Models.Entities;
@@ -9,13 +11,16 @@ namespace Restward.Api.Controllers;
 
 [ApiController]
 [Route("api/users")]
+[EnableRateLimiting("standard")]
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IMemoryCache _cache;
 
-    public UsersController(AppDbContext db)
+    public UsersController(AppDbContext db, IMemoryCache cache)
     {
         _db = db;
+        _cache = cache;
     }
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
@@ -92,6 +97,7 @@ public class UsersController : ControllerBase
         if (user is null)
             return NotFound();
 
+        _cache.Remove($"auth:{user.ApiKey}");
         _db.Users.Remove(user);
         await _db.SaveChangesAsync();
         return NoContent();

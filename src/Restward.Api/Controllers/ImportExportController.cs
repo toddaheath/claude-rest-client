@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Restward.Api.Data;
 using Restward.Api.Models.Dtos;
@@ -10,6 +11,7 @@ namespace Restward.Api.Controllers;
 
 [ApiController]
 [Route("api")]
+[EnableRateLimiting("standard")]
 public class ImportExportController : ControllerBase
 {
     private readonly AppDbContext _db;

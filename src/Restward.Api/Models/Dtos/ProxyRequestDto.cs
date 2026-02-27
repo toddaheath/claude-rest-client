@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Restward.Api.Models.Dtos;
@@ -7,6 +8,7 @@ public class ProxyRequestDto
     [JsonPropertyName("method")]
     public string Method { get; set; } = "GET";
 
+    [Required]
     [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
 

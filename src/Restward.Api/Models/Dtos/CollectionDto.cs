@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Restward.Api.Models.Dtos;
@@ -34,9 +35,12 @@ public class CollectionDto
 
 public class CreateCollectionDto
 {
+    [Required]
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
+    [MaxLength(1000)]
     [JsonPropertyName("description")]
     public string? Description { get; set; }
 
@@ -46,9 +50,11 @@ public class CreateCollectionDto
 
 public class UpdateCollectionDto
 {
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string? Name { get; set; }
 
+    [MaxLength(1000)]
     [JsonPropertyName("description")]
     public string? Description { get; set; }
 

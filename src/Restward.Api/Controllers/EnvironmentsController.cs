@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Restward.Api.Data;
 using Restward.Api.Models.Dtos;
@@ -9,6 +10,7 @@ namespace Restward.Api.Controllers;
 
 [ApiController]
 [Route("api/environments")]
+[EnableRateLimiting("standard")]
 public class EnvironmentsController : ControllerBase
 {
     private readonly AppDbContext _db;

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Restward.Api.Data;
+using Restward.Api.Models.Entities;
 
 namespace Restward.Api.Middleware;
 
@@ -29,11 +31,19 @@ public class ApiKeyAuthMiddleware
             return;
         }
 
-        var db = context.RequestServices.GetRequiredService<AppDbContext>();
-        var user = await db.Users.FirstOrDefaultAsync(u => u.ApiKey == apiKey.ToString());
+        var cache = context.RequestServices.GetRequiredService<IMemoryCache>();
+        var cacheKey = $"auth:{apiKey}";
+
+        var user = await cache.GetOrCreateAsync(cacheKey, async entry =>
+        {
+            entry.SlidingExpiration = TimeSpan.FromMinutes(5);
+            var db = context.RequestServices.GetRequiredService<AppDbContext>();
+            return await db.Users.FirstOrDefaultAsync(u => u.ApiKey == apiKey.ToString());
+        });
 
         if (user is null)
         {
+            cache.Remove(cacheKey);
             context.Response.StatusCode = 401;
             await context.Response.WriteAsJsonAsync(new { error = "Invalid API key" });
             return;

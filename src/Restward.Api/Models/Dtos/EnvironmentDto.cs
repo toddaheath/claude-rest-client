@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Restward.Api.Models.Dtos;
@@ -28,6 +29,8 @@ public class EnvironmentDto
 
 public class CreateEnvironmentDto
 {
+    [Required]
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
@@ -40,6 +43,7 @@ public class CreateEnvironmentDto
 
 public class UpdateEnvironmentDto
 {
+    [MaxLength(200)]
     [JsonPropertyName("name")]
     public string? Name { get; set; }
 
