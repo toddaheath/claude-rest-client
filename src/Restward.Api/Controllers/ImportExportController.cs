@@ -27,7 +27,12 @@ public class ImportExportController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Imports a Postman v2 collection.</summary>
     [HttpPost("import/postman")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(CollectionDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CollectionDto>> ImportPostman()
     {
         var user = GetCurrentUser();
@@ -50,7 +55,12 @@ public class ImportExportController : ControllerBase
         });
     }
 
+    /// <summary>Imports an Insomnia v4 collection.</summary>
     [HttpPost("import/insomnia")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(CollectionDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CollectionDto>> ImportInsomnia()
     {
         var user = GetCurrentUser();
@@ -73,7 +83,11 @@ public class ImportExportController : ControllerBase
         });
     }
 
+    /// <summary>Exports a collection in Postman v2 format.</summary>
     [HttpGet("export/postman/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ExportPostman(Guid id)
     {
         var collection = await LoadCollectionForExport(id);
@@ -84,7 +98,11 @@ public class ImportExportController : ControllerBase
             "application/json");
     }
 
+    /// <summary>Exports a collection in Insomnia v4 format.</summary>
     [HttpGet("export/insomnia/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ExportInsomnia(Guid id)
     {
         var collection = await LoadCollectionForExport(id);

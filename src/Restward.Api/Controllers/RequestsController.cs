@@ -20,7 +20,11 @@ public class RequestsController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Creates a new request within a collection.</summary>
     [HttpPost("api/collections/{collectionId:guid}/requests")]
+    [ProducesResponseType(typeof(RequestDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<RequestDto>> Create(Guid collectionId, [FromBody] CreateRequestDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -65,7 +69,11 @@ public class RequestsController : ControllerBase
         return Created($"/api/requests/{request.Id}", CollectionsController.MapRequest(request));
     }
 
+    /// <summary>Gets a request by ID.</summary>
     [HttpGet("api/requests/{id:guid}")]
+    [ProducesResponseType(typeof(RequestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<RequestDto>> GetById(Guid id)
     {
         var userId = GetCurrentUser().Id;
@@ -81,7 +89,11 @@ public class RequestsController : ControllerBase
         return Ok(CollectionsController.MapRequest(request));
     }
 
+    /// <summary>Updates an existing request.</summary>
     [HttpPut("api/requests/{id:guid}")]
+    [ProducesResponseType(typeof(RequestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<RequestDto>> Update(Guid id, [FromBody] UpdateRequestDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -133,7 +145,11 @@ public class RequestsController : ControllerBase
         return Ok(CollectionsController.MapRequest(request));
     }
 
+    /// <summary>Deletes a request by ID.</summary>
     [HttpDelete("api/requests/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = GetCurrentUser().Id;

@@ -18,7 +18,11 @@ public class ProxyController : ControllerBase
         _proxyService = proxyService;
     }
 
+    /// <summary>Executes an HTTP request through the proxy.</summary>
     [HttpPost]
+    [ProducesResponseType(typeof(ProxyResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ProxyResponseDto>> Execute([FromBody] ProxyRequestDto request)
     {
         if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri) ||

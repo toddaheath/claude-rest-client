@@ -21,7 +21,10 @@ public class CollectionsController : ControllerBase
 
     private User GetCurrentUser() => (User)HttpContext.Items["User"]!;
 
+    /// <summary>Lists all collections accessible to the current user.</summary>
     [HttpGet]
+    [ProducesResponseType(typeof(List<CollectionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<List<CollectionDto>>> GetAll()
     {
         var userId = GetCurrentUser().Id;
@@ -43,7 +46,11 @@ public class CollectionsController : ControllerBase
         return Ok(collections);
     }
 
+    /// <summary>Gets a collection by ID, including its folders and requests.</summary>
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(CollectionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CollectionDto>> GetById(Guid id)
     {
         var userId = GetCurrentUser().Id;
@@ -69,7 +76,11 @@ public class CollectionsController : ControllerBase
         return Ok(MapCollection(collection));
     }
 
+    /// <summary>Creates a new collection.</summary>
     [HttpPost]
+    [ProducesResponseType(typeof(CollectionDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CollectionDto>> Create([FromBody] CreateCollectionDto dto)
     {
         var user = GetCurrentUser();
@@ -100,7 +111,11 @@ public class CollectionsController : ControllerBase
         });
     }
 
+    /// <summary>Updates an existing collection.</summary>
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(CollectionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CollectionDto>> Update(Guid id, [FromBody] UpdateCollectionDto dto)
     {
         var userId = GetCurrentUser().Id;
@@ -129,7 +144,11 @@ public class CollectionsController : ControllerBase
         });
     }
 
+    /// <summary>Deletes a collection by ID.</summary>
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = GetCurrentUser().Id;
