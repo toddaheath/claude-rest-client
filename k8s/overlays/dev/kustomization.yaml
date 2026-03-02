@@ -20,7 +20,8 @@ patches:
         name: restward-config
       data:
         ASPNETCORE_ENVIRONMENT: Development
-        Cors__Origins__0: "https://strestwardspadev.z13.web.core.windows.net"
+        Cors__Origins__0: "https://restward.dev.heathrobotics.io"
+        Cors__Origins__1: "https://strestwardspadev.z13.web.core.windows.net"
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
