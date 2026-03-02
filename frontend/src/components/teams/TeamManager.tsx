@@ -20,10 +20,13 @@ export function TeamManager({ onClose }: Props) {
   useEffect(() => {
     if (selectedTeamId) {
       getTeam(selectedTeamId).then(setTeamDetail).catch(console.error);
-    } else {
-      setTeamDetail(null);
     }
   }, [selectedTeamId, getTeam]);
+
+  const selectTeam = (id: string | null) => {
+    setSelectedTeamId(id);
+    if (!id) setTeamDetail(null);
+  };
 
   const handleCreateTeam = async () => {
     if (!newTeamName.trim()) return;
@@ -31,7 +34,7 @@ export function TeamManager({ onClose }: Props) {
     try {
       const team = await createTeam(newTeamName.trim());
       setNewTeamName('');
-      setSelectedTeamId(team.id);
+      selectTeam(team.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create team');
     }
@@ -123,7 +126,7 @@ export function TeamManager({ onClose }: Props) {
                 {teams.map((team) => (
                   <div
                     key={team.id}
-                    onClick={() => setSelectedTeamId(team.id)}
+                    onClick={() => selectTeam(team.id)}
                     style={{
                       padding: '8px 12px', cursor: 'pointer', fontSize: 13,
                       background: team.id === selectedTeamId ? 'var(--color-bg-active)' : 'transparent',
@@ -135,7 +138,7 @@ export function TeamManager({ onClose }: Props) {
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteTeam(team.id);
-                        if (selectedTeamId === team.id) setSelectedTeamId(null);
+                        if (selectedTeamId === team.id) selectTeam(null);
                       }}
                       style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 14 }}
                     >×</button>
