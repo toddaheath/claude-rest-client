@@ -1,6 +1,6 @@
 import { mockApi } from './mockClient';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 let apiKey = localStorage.getItem('restward_api_key') || '';
 let authToken = localStorage.getItem('restward_auth_token') || '';
