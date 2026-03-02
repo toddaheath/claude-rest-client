@@ -13,7 +13,7 @@ export function ExportDialog({ onClose }: Props) {
 
   const handleExport = () => {
     if (!selectedId) return;
-    const apiBase = import.meta.env.VITE_API_URL || '/api';
+    const apiBase = `${import.meta.env.VITE_API_URL || ''}/api`;
     const url = `${apiBase}/export/${format}/${selectedId}`;
 
     const headers: Record<string, string> = {};
