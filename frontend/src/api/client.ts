@@ -3,6 +3,7 @@ import { mockApi } from './mockClient';
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 let apiKey = localStorage.getItem('restward_api_key') || '';
+let authToken = localStorage.getItem('restward_auth_token') || '';
 
 export const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true';
 
@@ -15,11 +16,36 @@ export function getApiKey(): string {
   return apiKey;
 }
 
+export function setAuthToken(token: string) {
+  authToken = token;
+  localStorage.setItem('restward_auth_token', token);
+}
+
+export function getAuthToken(): string {
+  return authToken;
+}
+
+export function clearAuth() {
+  apiKey = '';
+  authToken = '';
+  localStorage.removeItem('restward_api_key');
+  localStorage.removeItem('restward_auth_token');
+}
+
+export function isAuthenticated(): boolean {
+  return isDemoMode || !!authToken || !!apiKey;
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers: Record<string, string> = {
-    'X-Api-Key': apiKey,
     ...(options.headers as Record<string, string> || {}),
   };
+
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`;
+  } else if (apiKey) {
+    headers['X-Api-Key'] = apiKey;
+  }
 
   if (options.body && typeof options.body === 'string') {
     headers['Content-Type'] = headers['Content-Type'] || 'application/json';

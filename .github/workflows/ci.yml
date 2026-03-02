@@ -2,21 +2,42 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
     branches: [main]
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  dotnet:
+  backend:
     name: .NET Build & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet restore ClaudeRestClient.sln
-      - run: dotnet build ClaudeRestClient.sln --no-restore
-      - run: dotnet test ClaudeRestClient.sln --no-build --verbosity normal
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        run: dotnet restore ClaudeRestClient.sln
+
+      - name: Build
+        run: dotnet build ClaudeRestClient.sln --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test ClaudeRestClient.sln --no-build --configuration Release --verbosity normal
 
   frontend:
     name: Frontend Build & Lint
@@ -26,11 +47,25 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/

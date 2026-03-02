@@ -24,7 +24,7 @@ export function ResponsePanel() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#888' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'var(--color-text-secondary)' }}>
         Sending request...
       </div>
     );
@@ -32,7 +32,7 @@ export function ResponsePanel() {
 
   if (!response) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#555' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'var(--color-text-muted)' }}>
         Send a request to see the response
       </div>
     );
@@ -44,13 +44,13 @@ export function ResponsePanel() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 16, padding: '8px 16px',
-        borderBottom: '1px solid #333', fontSize: 13,
+        borderBottom: '1px solid var(--color-border-primary)', fontSize: 13,
       }}>
         <span style={{ color: statusColor(response.status_code), fontWeight: 700 }}>
           {response.status_code} {response.status_text}
         </span>
-        <span style={{ color: '#888' }}>{response.elapsed_ms} ms</span>
-        <span style={{ color: '#888' }}>{formatBytes(response.size_bytes)}</span>
+        <span style={{ color: 'var(--color-text-secondary)' }}>{response.elapsed_ms} ms</span>
+        <span style={{ color: 'var(--color-text-secondary)' }}>{formatBytes(response.size_bytes)}</span>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 0 }}>
           {(['body', 'headers'] as Tab[]).map((t) => (
@@ -59,8 +59,8 @@ export function ResponsePanel() {
               onClick={() => setTab(t)}
               style={{
                 padding: '4px 12px', background: 'none', border: 'none',
-                borderBottom: tab === t ? '2px solid #0078d4' : '2px solid transparent',
-                color: tab === t ? '#fff' : '#888', cursor: 'pointer', fontSize: 13,
+                borderBottom: tab === t ? '2px solid var(--color-accent)' : '2px solid transparent',
+                color: tab === t ? 'var(--color-text-bright)' : 'var(--color-text-secondary)', cursor: 'pointer', fontSize: 13,
               }}
             >
               {t === 'body' ? 'Body' : `Headers (${headerCount})`}

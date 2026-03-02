@@ -20,6 +20,14 @@ public class User
     [Column("api_key")]
     public string ApiKey { get; set; } = string.Empty;
 
+    [MaxLength(256)]
+    [Column("email")]
+    public string? Email { get; set; }
+
+    [MaxLength(256)]
+    [Column("password_hash")]
+    public string? PasswordHash { get; set; }
+
     [Column("is_admin")]
     public bool IsAdmin { get; set; }
 
@@ -28,4 +36,5 @@ public class User
 
     public List<Collection> Collections { get; set; } = [];
     public List<Environment> Environments { get; set; } = [];
+    public List<TeamMember> TeamMemberships { get; set; } = [];
 }

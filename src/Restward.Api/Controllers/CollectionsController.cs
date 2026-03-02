@@ -29,8 +29,18 @@ public class CollectionsController : ControllerBase
     {
         var userId = GetCurrentUser().Id;
 
+        // Get team member user IDs for the current user's teams
+        var teamMemberIds = await _db.TeamMembers
+            .Where(tm => _db.TeamMembers
+                .Where(m => m.UserId == userId)
+                .Select(m => m.TeamId)
+                .Contains(tm.TeamId))
+            .Select(tm => tm.UserId)
+            .Distinct()
+            .ToListAsync();
+
         var collections = await _db.Collections
-            .Where(c => c.OwnerId == userId || c.IsShared)
+            .Where(c => c.OwnerId == userId || c.IsShared || teamMemberIds.Contains(c.OwnerId))
             .Select(c => new CollectionDto
             {
                 Id = c.Id,

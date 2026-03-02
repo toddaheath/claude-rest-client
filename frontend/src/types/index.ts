@@ -80,8 +80,43 @@ export interface ProxyResponse {
 export interface User {
   id: string;
   name: string;
+  email?: string;
   is_admin: boolean;
   created_at: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+  api_key: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  owner_id: string;
+  created_at: string;
+  members?: TeamMember[];
+}
+
+export interface TeamMember {
+  id: string;
+  user_id: string;
+  user_name: string;
+  user_email?: string;
+  role: string;
+  joined_at: string;
+}
+
+export interface TeamInvitation {
+  id: string;
+  team_id: string;
+  team_name: string;
+  email: string;
+  invited_by_name: string;
+  status: string;
+  created_at: string;
+  expires_at: string;
 }
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';

@@ -19,15 +19,15 @@ export function RequestPanel() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <UrlBar />
-      <div style={{ display: 'flex', borderBottom: '1px solid #333', paddingLeft: 16 }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--color-border-primary)', paddingLeft: 16 }}>
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             style={{
               padding: '8px 16px', background: 'none', border: 'none',
-              borderBottom: tab === t.key ? '2px solid #0078d4' : '2px solid transparent',
-              color: tab === t.key ? '#fff' : '#888', cursor: 'pointer', fontSize: 13,
+              borderBottom: tab === t.key ? '2px solid var(--color-accent)' : '2px solid transparent',
+              color: tab === t.key ? 'var(--color-text-bright)' : 'var(--color-text-secondary)', cursor: 'pointer', fontSize: 13,
             }}
           >
             {t.label}

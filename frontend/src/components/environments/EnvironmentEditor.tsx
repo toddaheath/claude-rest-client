@@ -58,7 +58,7 @@ export function EnvironmentEditor({ onClose }: Props) {
     <div
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        background: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center',
+        background: 'var(--color-overlay)', display: 'flex', justifyContent: 'center', alignItems: 'center',
         zIndex: 100,
       }}
       onClick={onClose}
@@ -66,12 +66,12 @@ export function EnvironmentEditor({ onClose }: Props) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#252526', borderRadius: 8, width: 700, maxHeight: '80vh',
-          display: 'flex', overflow: 'hidden', border: '1px solid #444',
+          background: 'var(--color-bg-secondary)', borderRadius: 8, width: 700, maxHeight: '80vh',
+          display: 'flex', overflow: 'hidden', border: '1px solid var(--color-border-secondary)',
         }}
       >
-        <div style={{ width: 200, borderRight: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '12px', borderBottom: '1px solid #333', fontSize: 14, fontWeight: 600 }}>
+        <div style={{ width: 200, borderRight: '1px solid var(--color-border-primary)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px', borderBottom: '1px solid var(--color-border-primary)', fontSize: 14, fontWeight: 600 }}>
             Environments
           </div>
           <div style={{ flex: 1, overflow: 'auto' }}>
@@ -81,33 +81,33 @@ export function EnvironmentEditor({ onClose }: Props) {
                 onClick={() => handleSelect(env)}
                 style={{
                   padding: '8px 12px', cursor: 'pointer', fontSize: 13,
-                  background: env.id === selectedId ? '#37373d' : 'transparent',
+                  background: env.id === selectedId ? 'var(--color-bg-active)' : 'transparent',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}
               >
                 <span>{env.name}</span>
                 <button
                   onClick={(e) => { e.stopPropagation(); deleteEnvironment(env.id); }}
-                  style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: 14 }}
+                  style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 14 }}
                 >×</button>
               </div>
             ))}
           </div>
-          <div style={{ padding: 8, borderTop: '1px solid #333', display: 'flex', gap: 4 }}>
+          <div style={{ padding: 8, borderTop: '1px solid var(--color-border-primary)', display: 'flex', gap: 4 }}>
             <input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
               placeholder="New env"
               style={{
-                flex: 1, padding: '4px 8px', background: '#3c3c3c', border: '1px solid #555',
-                borderRadius: 4, color: '#fff', fontSize: 12, outline: 'none',
+                flex: 1, padding: '4px 8px', background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-tertiary)',
+                borderRadius: 4, color: 'var(--color-text-bright)', fontSize: 12, outline: 'none',
               }}
             />
             <button
               onClick={handleCreate}
               style={{
-                padding: '4px 8px', background: '#0078d4', color: '#fff',
+                padding: '4px 8px', background: 'var(--color-accent)', color: '#fff',
                 border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12,
               }}
             >+</button>
@@ -117,26 +117,26 @@ export function EnvironmentEditor({ onClose }: Props) {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {selected ? (
             <>
-              <div style={{ padding: 12, borderBottom: '1px solid #333', display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div style={{ padding: 12, borderBottom: '1px solid var(--color-border-primary)', display: 'flex', gap: 8, alignItems: 'center' }}>
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   style={{
-                    flex: 1, padding: '6px 8px', background: '#3c3c3c', border: '1px solid #555',
-                    borderRadius: 4, color: '#fff', fontSize: 14, outline: 'none',
+                    flex: 1, padding: '6px 8px', background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-tertiary)',
+                    borderRadius: 4, color: 'var(--color-text-bright)', fontSize: 14, outline: 'none',
                   }}
                 />
                 <button
                   onClick={handleSave}
                   style={{
-                    padding: '6px 16px', background: '#0078d4', color: '#fff',
+                    padding: '6px 16px', background: 'var(--color-accent)', color: '#fff',
                     border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13,
                   }}
                 >Save</button>
                 <button
                   onClick={onClose}
                   style={{
-                    padding: '6px 16px', background: '#333', color: '#fff',
+                    padding: '6px 16px', background: 'var(--color-border-primary)', color: 'var(--color-text-bright)',
                     border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13,
                   }}
                 >Close</button>
@@ -148,15 +148,15 @@ export function EnvironmentEditor({ onClose }: Props) {
                       type="checkbox"
                       checked={v.enabled}
                       onChange={(e) => updateVar(i, { enabled: e.target.checked })}
-                      style={{ accentColor: '#0078d4' }}
+                      style={{ accentColor: 'var(--color-accent)' }}
                     />
                     <input
                       value={v.key}
                       onChange={(e) => updateVar(i, { key: e.target.value })}
                       placeholder="Variable"
                       style={{
-                        flex: 1, padding: '6px 8px', background: '#2d2d2d', color: '#fff',
-                        border: '1px solid #444', borderRadius: 4, fontSize: 13, outline: 'none',
+                        flex: 1, padding: '6px 8px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+                        border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 13, outline: 'none',
                       }}
                     />
                     <input
@@ -164,27 +164,27 @@ export function EnvironmentEditor({ onClose }: Props) {
                       onChange={(e) => updateVar(i, { value: e.target.value })}
                       placeholder="Value"
                       style={{
-                        flex: 1, padding: '6px 8px', background: '#2d2d2d', color: '#fff',
-                        border: '1px solid #444', borderRadius: 4, fontSize: 13, outline: 'none',
+                        flex: 1, padding: '6px 8px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+                        border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 13, outline: 'none',
                       }}
                     />
                     <button
                       onClick={() => removeVar(i)}
-                      style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: 16 }}
+                      style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 16 }}
                     >×</button>
                   </div>
                 ))}
                 <button
                   onClick={addVariable}
                   style={{
-                    background: 'none', border: 'none', color: '#0078d4',
+                    background: 'none', border: 'none', color: 'var(--color-accent)',
                     cursor: 'pointer', fontSize: 13, padding: '4px 0', marginTop: 4,
                   }}
                 >+ Add variable</button>
               </div>
             </>
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, color: '#666' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, color: 'var(--color-text-muted)' }}>
               Select or create an environment
             </div>
           )}

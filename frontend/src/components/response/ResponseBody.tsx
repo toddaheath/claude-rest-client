@@ -1,4 +1,5 @@
 import Editor from '@monaco-editor/react';
+import { useTheme } from '../../hooks/useTheme';
 
 interface Props {
   body: string;
@@ -24,6 +25,7 @@ function tryFormatJson(body: string): string {
 export function ResponseBody({ body, headers }: Props) {
   const language = detectLanguage(body, headers);
   const formatted = language === 'json' ? tryFormatJson(body) : body;
+  const { theme } = useTheme();
 
   return (
     <div style={{ height: '100%' }}>
@@ -31,7 +33,7 @@ export function ResponseBody({ body, headers }: Props) {
         height="100%"
         language={language}
         value={formatted}
-        theme="vs-dark"
+        theme={theme === 'dark' ? 'vs-dark' : 'light'}
         options={{
           readOnly: true,
           minimap: { enabled: false },

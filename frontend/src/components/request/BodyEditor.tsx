@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { useStore } from '../../store';
+import { useTheme } from '../../hooks/useTheme';
 
 const CONTENT_TYPES = [
   { label: 'JSON', value: 'application/json' },
@@ -17,6 +18,7 @@ function getLanguage(contentType: string): string {
 
 export function BodyEditor() {
   const { activeRequest, setActiveRequest } = useStore();
+  const { theme } = useTheme();
 
   return (
     <div style={{ padding: '8px 16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -25,8 +27,8 @@ export function BodyEditor() {
           value={activeRequest.bodyContentType}
           onChange={(e) => setActiveRequest({ bodyContentType: e.target.value })}
           style={{
-            padding: '4px 8px', background: '#2d2d2d', color: '#d4d4d4',
-            border: '1px solid #444', borderRadius: 4, fontSize: 12, outline: 'none',
+            padding: '4px 8px', background: 'var(--color-bg-input)', color: 'var(--color-text-primary)',
+            border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 12, outline: 'none',
           }}
         >
           {CONTENT_TYPES.map((ct) => (
@@ -34,13 +36,13 @@ export function BodyEditor() {
           ))}
         </select>
       </div>
-      <div style={{ flex: 1, minHeight: 150, border: '1px solid #333', borderRadius: 4, overflow: 'hidden' }}>
+      <div style={{ flex: 1, minHeight: 150, border: '1px solid var(--color-border-primary)', borderRadius: 4, overflow: 'hidden' }}>
         <Editor
           height="100%"
           language={getLanguage(activeRequest.bodyContentType)}
           value={activeRequest.body}
           onChange={(value) => setActiveRequest({ body: value || '' })}
-          theme="vs-dark"
+          theme={theme === 'dark' ? 'vs-dark' : 'light'}
           options={{
             minimap: { enabled: false },
             fontSize: 13,

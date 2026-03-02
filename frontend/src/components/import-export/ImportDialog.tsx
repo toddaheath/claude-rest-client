@@ -33,7 +33,7 @@ export function ImportDialog({ onClose }: Props) {
     <div
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        background: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center',
+        background: 'var(--color-overlay)', display: 'flex', justifyContent: 'center', alignItems: 'center',
         zIndex: 100,
       }}
       onClick={onClose}
@@ -41,20 +41,20 @@ export function ImportDialog({ onClose }: Props) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#252526', borderRadius: 8, padding: 24, width: 400,
-          border: '1px solid #444',
+          background: 'var(--color-bg-secondary)', borderRadius: 8, padding: 24, width: 400,
+          border: '1px solid var(--color-border-secondary)',
         }}
       >
         <h3 style={{ margin: '0 0 16px', fontSize: 16 }}>Import Collection</h3>
 
         <div style={{ marginBottom: 16 }}>
-          <label style={{ fontSize: 13, color: '#888', display: 'block', marginBottom: 4 }}>Format</label>
+          <label style={{ fontSize: 13, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>Format</label>
           <select
             value={format}
             onChange={(e) => setFormat(e.target.value as 'postman' | 'insomnia')}
             style={{
-              width: '100%', padding: '8px', background: '#2d2d2d', color: '#fff',
-              border: '1px solid #444', borderRadius: 4, fontSize: 13, outline: 'none',
+              width: '100%', padding: '8px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+              border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 13, outline: 'none',
             }}
           >
             <option value="postman">Postman (v2.1)</option>
@@ -63,22 +63,22 @@ export function ImportDialog({ onClose }: Props) {
         </div>
 
         <div style={{ marginBottom: 16 }}>
-          <label style={{ fontSize: 13, color: '#888', display: 'block', marginBottom: 4 }}>File</label>
+          <label style={{ fontSize: 13, color: 'var(--color-text-secondary)', display: 'block', marginBottom: 4 }}>File</label>
           <input
             type="file"
             accept=".json"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            style={{ fontSize: 13, color: '#d4d4d4' }}
+            style={{ fontSize: 13, color: 'var(--color-text-primary)' }}
           />
         </div>
 
-        {error && <p style={{ color: '#f93e3e', fontSize: 13, marginBottom: 12 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--color-error)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
           <button
             onClick={onClose}
             style={{
-              padding: '8px 16px', background: '#333', color: '#fff',
+              padding: '8px 16px', background: 'var(--color-border-primary)', color: 'var(--color-text-bright)',
               border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13,
             }}
           >Cancel</button>
@@ -86,7 +86,7 @@ export function ImportDialog({ onClose }: Props) {
             onClick={handleImport}
             disabled={!file || importing}
             style={{
-              padding: '8px 16px', background: '#0078d4', color: '#fff',
+              padding: '8px 16px', background: 'var(--color-accent)', color: '#fff',
               border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13,
               opacity: !file || importing ? 0.5 : 1,
             }}
