@@ -23,37 +23,37 @@ export function Sidebar() {
 
   return (
     <div style={{
-      width: 280, background: '#252526', borderRight: '1px solid #333',
+      width: 280, background: 'var(--color-bg-secondary)', borderRight: '1px solid var(--color-border-primary)',
       display: 'flex', flexDirection: 'column', overflow: 'hidden',
     }}>
       <div style={{
-        padding: '12px 16px', borderBottom: '1px solid #333',
+        padding: '12px 16px', borderBottom: '1px solid var(--color-border-primary)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <span style={{ fontWeight: 600, fontSize: 13, textTransform: 'uppercase', color: '#888' }}>
+        <span style={{ fontWeight: 600, fontSize: 13, textTransform: 'uppercase', color: 'var(--color-text-secondary)' }}>
           Collections
         </span>
         <div style={{ display: 'flex', gap: 4 }}>
           <button
             onClick={() => setShowNewInput(!showNewInput)}
             title="New Collection"
-            style={{ background: 'none', border: 'none', color: '#d4d4d4', cursor: 'pointer', fontSize: 16 }}
+            style={{ background: 'none', border: 'none', color: 'var(--color-text-primary)', cursor: 'pointer', fontSize: 16 }}
           >+</button>
           <button
             onClick={() => setShowImport(true)}
             title="Import"
-            style={{ background: 'none', border: 'none', color: '#d4d4d4', cursor: 'pointer', fontSize: 12 }}
+            style={{ background: 'none', border: 'none', color: 'var(--color-text-primary)', cursor: 'pointer', fontSize: 12 }}
           >Import</button>
           <button
             onClick={() => setShowExport(true)}
             title="Export"
-            style={{ background: 'none', border: 'none', color: '#d4d4d4', cursor: 'pointer', fontSize: 12 }}
+            style={{ background: 'none', border: 'none', color: 'var(--color-text-primary)', cursor: 'pointer', fontSize: 12 }}
           >Export</button>
         </div>
       </div>
 
       {showNewInput && (
-        <div style={{ padding: '8px 16px', borderBottom: '1px solid #333' }}>
+        <div style={{ padding: '8px 16px', borderBottom: '1px solid var(--color-border-primary)' }}>
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
@@ -61,8 +61,8 @@ export function Sidebar() {
             placeholder="Collection name"
             autoFocus
             style={{
-              width: '100%', padding: '6px 8px', background: '#3c3c3c', border: '1px solid #555',
-              borderRadius: 4, color: '#fff', fontSize: 13, outline: 'none', boxSizing: 'border-box',
+              width: '100%', padding: '6px 8px', background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-tertiary)',
+              borderRadius: 4, color: 'var(--color-text-bright)', fontSize: 13, outline: 'none', boxSizing: 'border-box',
             }}
           />
         </div>
@@ -73,7 +73,7 @@ export function Sidebar() {
           <CollectionTree key={c.id} collection={c} />
         ))}
         {collections.length === 0 && (
-          <p style={{ padding: '16px', color: '#666', fontSize: 13, textAlign: 'center' }}>
+          <p style={{ padding: '16px', color: 'var(--color-text-muted)', fontSize: 13, textAlign: 'center' }}>
             No collections yet
           </p>
         )}

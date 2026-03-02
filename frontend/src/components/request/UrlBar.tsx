@@ -20,15 +20,15 @@ export function UrlBar() {
         onKeyDown={(e) => e.key === 'Enter' && sendRequest()}
         placeholder="Enter request URL"
         style={{
-          flex: 1, padding: '8px 12px', background: '#2d2d2d', color: '#fff',
-          border: '1px solid #555', borderLeft: 'none', fontSize: 14, outline: 'none',
+          flex: 1, padding: '8px 12px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+          border: '1px solid var(--color-border-tertiary)', borderLeft: 'none', fontSize: 14, outline: 'none',
         }}
       />
       <button
         onClick={sendRequest}
         disabled={isLoading}
         style={{
-          padding: '8px 24px', background: isLoading ? '#555' : '#0078d4',
+          padding: '8px 24px', background: isLoading ? 'var(--color-accent-disabled)' : 'var(--color-accent)',
           color: '#fff', border: 'none', borderRadius: '0 6px 6px 0',
           cursor: isLoading ? 'wait' : 'pointer', fontSize: 14, fontWeight: 600,
         }}

@@ -31,15 +31,15 @@ export function KeyValueEditor({ items, onChange, keyPlaceholder = 'Key', valueP
             type="checkbox"
             checked={item.enabled}
             onChange={(e) => update(index, { enabled: e.target.checked })}
-            style={{ accentColor: '#0078d4' }}
+            style={{ accentColor: 'var(--color-accent)' }}
           />
           <input
             value={item.key}
             onChange={(e) => update(index, { key: e.target.value })}
             placeholder={keyPlaceholder}
             style={{
-              flex: 1, padding: '6px 8px', background: '#2d2d2d', color: '#fff',
-              border: '1px solid #444', borderRadius: 4, fontSize: 13, outline: 'none',
+              flex: 1, padding: '6px 8px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+              border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 13, outline: 'none',
             }}
           />
           <input
@@ -47,14 +47,14 @@ export function KeyValueEditor({ items, onChange, keyPlaceholder = 'Key', valueP
             onChange={(e) => update(index, { value: e.target.value })}
             placeholder={valuePlaceholder}
             style={{
-              flex: 1, padding: '6px 8px', background: '#2d2d2d', color: '#fff',
-              border: '1px solid #444', borderRadius: 4, fontSize: 13, outline: 'none',
+              flex: 1, padding: '6px 8px', background: 'var(--color-bg-input)', color: 'var(--color-text-bright)',
+              border: '1px solid var(--color-border-secondary)', borderRadius: 4, fontSize: 13, outline: 'none',
             }}
           />
           <button
             onClick={() => remove(index)}
             style={{
-              background: 'none', border: 'none', color: '#666', cursor: 'pointer',
+              background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer',
               fontSize: 16, padding: '2px 6px',
             }}
           >
@@ -65,7 +65,7 @@ export function KeyValueEditor({ items, onChange, keyPlaceholder = 'Key', valueP
       <button
         onClick={addRow}
         style={{
-          background: 'none', border: 'none', color: '#0078d4', cursor: 'pointer',
+          background: 'none', border: 'none', color: 'var(--color-accent)', cursor: 'pointer',
           fontSize: 13, padding: '4px 0', marginTop: 4,
         }}
       >

@@ -16,12 +16,16 @@ public class AppDbContext : DbContext
     public DbSet<RequestParameter> RequestParameters => Set<RequestParameter>();
     public DbSet<Environment> Environments => Set<Environment>();
     public DbSet<EnvironmentVariable> EnvironmentVariables => Set<EnvironmentVariable>();
+    public DbSet<Team> Teams => Set<Team>();
+    public DbSet<TeamMember> TeamMembers => Set<TeamMember>();
+    public DbSet<TeamInvitation> TeamInvitations => Set<TeamInvitation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasIndex(e => e.ApiKey).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique().HasFilter("email IS NOT NULL");
         });
 
         modelBuilder.Entity<Collection>(entity =>
@@ -88,6 +92,50 @@ public class AppDbContext : DbContext
                 .WithMany(env => env.Variables)
                 .HasForeignKey(e => e.EnvironmentId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Team>(entity =>
+        {
+            entity.HasOne(e => e.Owner)
+                .WithMany()
+                .HasForeignKey(e => e.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<TeamMember>(entity =>
+        {
+            entity.HasIndex(e => new { e.TeamId, e.UserId }).IsUnique();
+
+            entity.HasOne(e => e.Team)
+                .WithMany(t => t.Members)
+                .HasForeignKey(e => e.TeamId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.TeamMemberships)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.Role)
+                .HasConversion<string>();
+        });
+
+        modelBuilder.Entity<TeamInvitation>(entity =>
+        {
+            entity.HasIndex(e => e.Token).IsUnique();
+
+            entity.HasOne(e => e.Team)
+                .WithMany(t => t.Invitations)
+                .HasForeignKey(e => e.TeamId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.InvitedBy)
+                .WithMany()
+                .HasForeignKey(e => e.InvitedById)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.Status)
+                .HasConversion<string>();
         });
     }
 }

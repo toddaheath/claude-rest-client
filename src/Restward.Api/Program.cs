@@ -36,12 +36,29 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API key for authentication"
     });
 
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Bearer token for authentication"
+    });
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "ApiKey" }
+            },
+            Array.Empty<string>()
+        },
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
             Array.Empty<string>()
         }
@@ -71,6 +88,7 @@ builder.Services.AddHttpClient("Proxy")
 builder.Services.AddSingleton<ProxyService>();
 builder.Services.AddSingleton<ImportService>();
 builder.Services.AddSingleton<ExportService>();
+builder.Services.AddSingleton<JwtService>();
 
 builder.Services.AddCors(options =>
 {
@@ -96,6 +114,13 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("proxy", opt =>
     {
         opt.PermitLimit = 30;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+
+    options.AddFixedWindowLimiter("auth", opt =>
+    {
+        opt.PermitLimit = 10;
         opt.Window = TimeSpan.FromMinutes(1);
         opt.QueueLimit = 0;
     });

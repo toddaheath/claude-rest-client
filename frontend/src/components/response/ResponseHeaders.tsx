@@ -10,15 +10,15 @@ export function ResponseHeaders({ headers }: Props) {
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '6px 8px', color: '#888', borderBottom: '1px solid #333' }}>Header</th>
-            <th style={{ textAlign: 'left', padding: '6px 8px', color: '#888', borderBottom: '1px solid #333' }}>Value</th>
+            <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border-primary)' }}>Header</th>
+            <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border-primary)' }}>Value</th>
           </tr>
         </thead>
         <tbody>
           {entries.map(([key, value]) => (
             <tr key={key}>
-              <td style={{ padding: '6px 8px', color: '#569cd6', borderBottom: '1px solid #2d2d2d' }}>{key}</td>
-              <td style={{ padding: '6px 8px', color: '#d4d4d4', borderBottom: '1px solid #2d2d2d', wordBreak: 'break-all' }}>{value}</td>
+              <td style={{ padding: '6px 8px', color: 'var(--color-text-link)', borderBottom: '1px solid var(--color-bg-input)' }}>{key}</td>
+              <td style={{ padding: '6px 8px', color: 'var(--color-text-primary)', borderBottom: '1px solid var(--color-bg-input)', wordBreak: 'break-all' }}>{value}</td>
             </tr>
           ))}
         </tbody>

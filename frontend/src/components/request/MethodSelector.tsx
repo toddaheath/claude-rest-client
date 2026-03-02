@@ -23,8 +23,8 @@ export function MethodSelector({ value, onChange }: Props) {
       value={value}
       onChange={(e) => onChange(e.target.value as HttpMethod)}
       style={{
-        padding: '8px 12px', background: '#2d2d2d', color: METHOD_COLORS[value] || '#fff',
-        border: '1px solid #555', borderRadius: '6px 0 0 6px', fontSize: 14,
+        padding: '8px 12px', background: 'var(--color-bg-input)', color: METHOD_COLORS[value] || 'var(--color-text-bright)',
+        border: '1px solid var(--color-border-tertiary)', borderRadius: '6px 0 0 6px', fontSize: 14,
         fontWeight: 700, cursor: 'pointer', outline: 'none', minWidth: 100,
       }}
     >

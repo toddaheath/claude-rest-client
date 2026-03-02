@@ -5,6 +5,8 @@ import type {
   KeyValuePair,
   ProxyResponse,
   HttpMethod,
+  Team,
+  TeamInvitation,
 } from '../types';
 
 interface ActiveRequest {
@@ -44,6 +46,8 @@ interface AppState {
   environments: Environment[];
   activeEnvironmentId: string | null;
   sidebarOpen: boolean;
+  teams: Team[];
+  pendingInvitations: TeamInvitation[];
 
   setActiveRequest: (req: Partial<ActiveRequest>) => void;
   resetRequest: () => void;
@@ -53,6 +57,8 @@ interface AppState {
   setEnvironments: (environments: Environment[]) => void;
   setActiveEnvironmentId: (id: string | null) => void;
   toggleSidebar: () => void;
+  setTeams: (teams: Team[]) => void;
+  setPendingInvitations: (invitations: TeamInvitation[]) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -63,6 +69,8 @@ export const useStore = create<AppState>((set) => ({
   environments: [],
   activeEnvironmentId: null,
   sidebarOpen: true,
+  teams: [],
+  pendingInvitations: [],
 
   setActiveRequest: (req) =>
     set((state) => ({ activeRequest: { ...state.activeRequest, ...req } })),
@@ -73,6 +81,8 @@ export const useStore = create<AppState>((set) => ({
   setEnvironments: (environments) => set({ environments }),
   setActiveEnvironmentId: (activeEnvironmentId) => set({ activeEnvironmentId }),
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  setTeams: (teams) => set({ teams }),
+  setPendingInvitations: (pendingInvitations) => set({ pendingInvitations }),
 }));
 
 export { newKeyValuePair };

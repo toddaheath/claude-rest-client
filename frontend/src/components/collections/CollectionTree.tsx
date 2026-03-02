@@ -56,13 +56,13 @@ function RequestEntry({ request, onSelect }: { request: RequestItem; onSelect: (
         display: 'flex', alignItems: 'center', gap: 8, padding: '4px 12px',
         cursor: 'pointer', fontSize: 13, borderRadius: 4,
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = '#2a2d2e')}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--color-bg-hover)')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
     >
-      <span style={{ color: methodColors[request.method] || '#888', fontSize: 10, fontWeight: 700, minWidth: 36 }}>
+      <span style={{ color: methodColors[request.method] || 'var(--color-text-secondary)', fontSize: 10, fontWeight: 700, minWidth: 36 }}>
         {request.method}
       </span>
-      <span style={{ color: '#d4d4d4', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <span style={{ color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         {request.name}
       </span>
     </div>

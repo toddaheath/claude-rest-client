@@ -1,8 +1,13 @@
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Restward.Api.Data;
 using Restward.Api.Models.Entities;
 
@@ -27,6 +32,50 @@ public class RestwardWebApplicationFactory : WebApplicationFactory<Program>
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseInMemoryDatabase(_dbName);
+            });
+
+            // Remove existing rate limiter configuration and re-add with higher limits for testing
+            var rateLimiterDescriptors = services
+                .Where(d => d.ServiceType == typeof(IConfigureOptions<RateLimiterOptions>))
+                .ToList();
+            foreach (var rlDescriptor in rateLimiterDescriptors)
+                services.Remove(rlDescriptor);
+
+            services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = 429;
+
+                options.AddFixedWindowLimiter("standard", opt =>
+                {
+                    opt.PermitLimit = 10000;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueLimit = 0;
+                });
+
+                options.AddFixedWindowLimiter("proxy", opt =>
+                {
+                    opt.PermitLimit = 10000;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueLimit = 0;
+                });
+
+                options.AddFixedWindowLimiter("auth", opt =>
+                {
+                    opt.PermitLimit = 10000;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueLimit = 0;
+                });
+            });
+        });
+
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Jwt:Secret"] = "test-jwt-secret-key-for-integration-tests-min-32",
+                ["Jwt:Issuer"] = "Restward",
+                ["Jwt:Audience"] = "Restward",
+                ["Jwt:ExpirationMinutes"] = "60"
             });
         });
     }
