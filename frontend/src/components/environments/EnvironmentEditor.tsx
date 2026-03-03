@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useStore } from '../../store';
 import { useEnvironments } from '../../hooks/useEnvironments';
 import type { Environment, EnvironmentVariable } from '../../types';
@@ -14,6 +14,43 @@ export function EnvironmentEditor({ onClose }: Props) {
   const [newName, setNewName] = useState('');
   const [editVars, setEditVars] = useState<EnvironmentVariable[]>([]);
   const [editName, setEditName] = useState('');
+
+  const [envSaveStatus, setEnvSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const savedIndicatorTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const doAutoSave = useCallback(async (id: string, name: string, vars: EnvironmentVariable[]) => {
+    setEnvSaveStatus('saving');
+    try {
+      await updateEnvironment(id, { name, variables: vars });
+      setEnvSaveStatus('saved');
+      if (savedIndicatorTimerRef.current) clearTimeout(savedIndicatorTimerRef.current);
+      savedIndicatorTimerRef.current = setTimeout(() => setEnvSaveStatus('idle'), 2000);
+    } catch {
+      setEnvSaveStatus('error');
+    }
+  }, [updateEnvironment]);
+
+  useEffect(() => {
+    // Auto-save when editVars or editName changes (only if an env is selected)
+    if (!selectedId || !editName) return;
+
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      doAutoSave(selectedId, editName, editVars);
+    }, 1500);
+
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    };
+  }, [editVars, editName, selectedId, doAutoSave]);
+
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+      if (savedIndicatorTimerRef.current) clearTimeout(savedIndicatorTimerRef.current);
+    };
+  }, []);
 
   const selected = environments.find((e) => e.id === selectedId);
 
@@ -133,6 +170,15 @@ export function EnvironmentEditor({ onClose }: Props) {
                     border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13,
                   }}
                 >Save</button>
+                {envSaveStatus === 'saving' && (
+                  <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>Saving...</span>
+                )}
+                {envSaveStatus === 'saved' && (
+                  <span style={{ fontSize: 12, color: 'var(--color-success, #4caf50)' }}>Saved</span>
+                )}
+                {envSaveStatus === 'error' && (
+                  <span style={{ fontSize: 12, color: 'var(--color-error)' }}>Save failed</span>
+                )}
                 <button
                   onClick={onClose}
                   style={{

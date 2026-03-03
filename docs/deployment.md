@@ -110,3 +110,16 @@ Note: PostgreSQL PVC is retained by default. Delete manually if needed:
 ```bash
 kubectl delete pvc data-restward-postgresql-0
 ```
+
+## Environment URLs
+
+| Environment | Frontend URL | API URL |
+|-------------|-------------|---------|
+| Local Dev | http://localhost:5173 | http://localhost:5000 |
+| Docker Compose | http://localhost | http://localhost:5000 |
+| Dev (Azure) | https://restward.dev.heathrobotics.io | https://restward-api.dev.heathrobotics.io |
+| Prod (Azure) | https://restward.heathrobotics.io | https://restward-api.heathrobotics.io |
+
+Azure Storage static site URLs (fallback):
+- Dev SPA: https://strestwardspadev.z13.web.core.windows.net
+- Prod SPA: https://strestwardspaprod.z13.web.core.windows.net

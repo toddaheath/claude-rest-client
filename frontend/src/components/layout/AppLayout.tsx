@@ -4,6 +4,7 @@ import { isAuthenticated as checkAuth, clearAuth, isDemoMode } from '../../api/c
 import { useCollections } from '../../hooks/useCollections';
 import { useEnvironments } from '../../hooks/useEnvironments';
 import { useTeams } from '../../hooks/useTeams';
+import { useAutoSave } from '../../hooks/useAutoSave';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { RequestPanel } from '../request/RequestPanel';
@@ -17,6 +18,8 @@ export function AppLayout() {
   const { fetchEnvironments } = useEnvironments();
   const { fetchTeams, fetchInvitations } = useTeams();
   const [authenticated, setAuthenticated] = useState(isDemoMode || checkAuth());
+
+  useAutoSave();
 
   useEffect(() => {
     if (authenticated) {

@@ -36,6 +36,15 @@ docker compose -f docker/docker-compose.yml up --build
 - `helm/restward/` — Helm chart for Kubernetes deployment
 - `docs/` — Architecture and deployment documentation
 
+## Environment URLs
+
+| Environment | Frontend URL | API URL |
+|-------------|-------------|---------|
+| Local Dev | http://localhost:5173 | http://localhost:5000 |
+| Docker Compose | http://localhost | http://localhost:5000 |
+| Dev (Azure) | https://restward.dev.heathrobotics.io | https://restward-api.dev.heathrobotics.io |
+| Prod (Azure) | https://restward.heathrobotics.io | https://restward-api.heathrobotics.io |
+
 ## Conventions
 - .NET 8, C# with nullable enabled
 - JSON serialization uses `System.Text.Json` with `JsonPropertyName` attributes for snake_case mapping

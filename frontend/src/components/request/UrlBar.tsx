@@ -3,12 +3,21 @@ import { useRequest } from '../../hooks/useRequest';
 import { MethodSelector } from './MethodSelector';
 import type { HttpMethod } from '../../types';
 
+const saveStatusStyles: Record<string, { color: string; text: string } | null> = {
+  idle: null,
+  saving: { color: 'var(--color-text-muted)', text: 'Saving...' },
+  saved: { color: 'var(--color-success, #4caf50)', text: 'Saved' },
+  error: { color: 'var(--color-error)', text: 'Save failed' },
+};
+
 export function UrlBar() {
-  const { activeRequest, setActiveRequest, isLoading } = useStore();
+  const { activeRequest, setActiveRequest, isLoading, saveStatus } = useStore();
   const { sendRequest } = useRequest();
 
+  const indicator = saveStatusStyles[saveStatus];
+
   return (
-    <div style={{ display: 'flex', padding: '12px 16px', gap: 0 }}>
+    <div style={{ display: 'flex', padding: '12px 16px', gap: 0, alignItems: 'center' }}>
       <MethodSelector
         value={activeRequest.method}
         onChange={(method: HttpMethod) => setActiveRequest({ method })}
@@ -35,6 +44,11 @@ export function UrlBar() {
       >
         {isLoading ? 'Sending...' : 'Send'}
       </button>
+      {indicator && (
+        <span style={{ marginLeft: 10, fontSize: 12, color: indicator.color, whiteSpace: 'nowrap' }}>
+          {indicator.text}
+        </span>
+      )}
     </div>
   );
 }
