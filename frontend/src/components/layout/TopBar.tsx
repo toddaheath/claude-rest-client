@@ -3,6 +3,7 @@ import { useStore } from '../../store';
 import { useTheme } from '../../hooks/useTheme';
 import { EnvironmentSelector } from '../environments/EnvironmentSelector';
 import { TeamManager } from '../teams/TeamManager';
+import { HelpDialog } from '../help/HelpDialog';
 
 interface Props {
   onLogout: () => void;
@@ -12,6 +13,7 @@ export function TopBar({ onLogout }: Props) {
   const { toggleSidebar, pendingInvitations } = useStore();
   const { theme, toggleTheme } = useTheme();
   const [showTeams, setShowTeams] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   return (
     <div style={{
@@ -54,6 +56,16 @@ export function TopBar({ onLogout }: Props) {
           )}
         </button>
         <button
+          onClick={() => setShowHelp(true)}
+          title="Help"
+          style={{
+            background: 'none', border: '1px solid var(--color-border-secondary)', color: 'var(--color-text-primary)',
+            borderRadius: 4, padding: '4px 8px', cursor: 'pointer', fontSize: 14, fontWeight: 600,
+          }}
+        >
+          ?
+        </button>
+        <button
           onClick={toggleTheme}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           style={{
@@ -75,6 +87,7 @@ export function TopBar({ onLogout }: Props) {
         </button>
       </div>
       {showTeams && <TeamManager onClose={() => setShowTeams(false)} />}
+      {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
     </div>
   );
 }

@@ -38,6 +38,8 @@ function defaultRequest(): ActiveRequest {
   };
 }
 
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 interface AppState {
   activeRequest: ActiveRequest;
   response: ProxyResponse | null;
@@ -48,6 +50,7 @@ interface AppState {
   sidebarOpen: boolean;
   teams: Team[];
   pendingInvitations: TeamInvitation[];
+  saveStatus: SaveStatus;
 
   setActiveRequest: (req: Partial<ActiveRequest>) => void;
   resetRequest: () => void;
@@ -59,6 +62,7 @@ interface AppState {
   toggleSidebar: () => void;
   setTeams: (teams: Team[]) => void;
   setPendingInvitations: (invitations: TeamInvitation[]) => void;
+  setSaveStatus: (status: SaveStatus) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -71,6 +75,7 @@ export const useStore = create<AppState>((set) => ({
   sidebarOpen: true,
   teams: [],
   pendingInvitations: [],
+  saveStatus: 'idle',
 
   setActiveRequest: (req) =>
     set((state) => ({ activeRequest: { ...state.activeRequest, ...req } })),
@@ -83,6 +88,7 @@ export const useStore = create<AppState>((set) => ({
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setTeams: (teams) => set({ teams }),
   setPendingInvitations: (pendingInvitations) => set({ pendingInvitations }),
+  setSaveStatus: (saveStatus) => set({ saveStatus }),
 }));
 
 export { newKeyValuePair };
